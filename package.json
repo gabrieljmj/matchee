@@ -1,0 +1,25 @@
+{
+  "name": "matchee",
+  "version": "0.1.0",
+  "description": "Type-safe expression matching",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "test": "vitest",
+    "lint": "tsc"
+  },
+  "author": "Gabriel Jacinto",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabrieljmj/matchee.git"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "devDependencies": {
+    "tsup": "^6.5.0",
+    "typescript": "^4.9.5",
+    "vitest": "^0.28.4"
+  }
+}
