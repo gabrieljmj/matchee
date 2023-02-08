@@ -18,6 +18,9 @@ export type Match<MatchResult, MatchCondition> = [
     | SingleMatch<MatchResult, MatchCondition>
 ];
 
+export type InferMatchCondition<MatchValue extends (value: any) => any> =
+  ReturnType<MatchValue>;
+
 export function match<MatchResult, MatchCondition>(
   expressions: Match<MatchResult, MatchCondition>
 ) {

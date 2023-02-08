@@ -106,6 +106,18 @@ try {
 }
 ```
 
+### Inferring result type
+
+It is provided a type-safe way to infer the result type of the match expression. The `InferMatchCondition` type is used to infer the result type.
+
+```ts
+import { match, type InferMatchCondition } from "matchee";
+
+const matcher = match([[1, 2, "100"], [3, "200"], "300"]);
+
+type ResultType = InferMatchCondition<typeof matcher>; // string
+```
+
 ## Available expression types
 
 It is possible to use any type of expression as a match case. The following types are supported:
