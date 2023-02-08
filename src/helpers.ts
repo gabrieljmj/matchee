@@ -22,7 +22,7 @@ export const validateExpressions = <T, U>(expressions: Match<T, U>) => {
     }
   };
   const validateGroupOfExpressions = (exp: T | SingleMatch<T, U>) =>
-    Array.isArray(exp) && exp.forEach(validate);
+    Array.isArray(exp) && exp.slice(0, -1).forEach(validate);
 
   expressions.forEach(validateGroupOfExpressions);
 };
