@@ -13,7 +13,9 @@ export type SingleMatch<MatchResult, MatchCondition> = [
 
 export type Match<MatchResult, MatchCondition> = [
   ...expressions: Array<SingleMatch<MatchResult, MatchCondition>>,
-  defaultValue: MatchResult | SingleMatch<MatchResult, MatchCondition>
+  defaultValue:
+    | MatchValue<MatchResult>
+    | SingleMatch<MatchResult, MatchCondition>
 ];
 
 export function match<MatchResult, MatchCondition>(

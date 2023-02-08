@@ -95,3 +95,20 @@ it("should compare regex expressions with strings and numbers", () => {
   expect(matcher("b")).toEqual("200");
   expect(matcher("c")).toEqual("300");
 });
+
+it("should allow function as default value", () => {
+  const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+  const cnpjRegex = /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
+
+  const matcher = match([
+    [cpfRegex, "CPF"],
+    [cnpjRegex, "CNPJ"],
+    () => {
+      throw new Error("Invalid document");
+    },
+  ]);
+
+  expect(matcher("123.456.789-10")).toEqual("CPF");
+  expect(matcher("12.345.678/9012-34")).toEqual("CNPJ");
+  expect(() => matcher("123")).toThrow(new Error("Invalid document"));
+});
