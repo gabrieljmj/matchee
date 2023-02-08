@@ -87,6 +87,25 @@ matcher("12.345.678/9012-34"); // "CNPJ"
 matcher("invalid"); // Error: Invalid document
 ```
 
+### No matches found
+
+If no match is found and no default case is provided, an error is thrown.
+
+```ts
+import { match } from "matchee";
+
+try {
+  const matcher = match([
+    [1, 2, "100"],
+    [3, "200"],
+  ]);
+
+  matcher(4);
+} catch (error) {
+  console.log(error.message); // UnhandledMatchExpression: No matching expression found for value 4. Maybe try adding a default value.
+}
+```
+
 ## Available expression types
 
 It is possible to use any type of expression as a match case. The following types are supported:
