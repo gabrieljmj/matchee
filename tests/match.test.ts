@@ -70,3 +70,19 @@ it("should not accept function as expressions", () => {
     new InvalidExpressionType(() => {})
   );
 });
+
+it("should execute a function only when the expression is matched", () => {
+  const matcher = match([
+    [1, 2, "100"],
+    [3, 4, "200"],
+    [
+      5,
+      () => {
+        throw new Error("Should be executed");
+      },
+    ],
+  ]);
+
+  expect(matcher(1)).toEqual("100");
+  expect(() => matcher(5)).toThrow(new Error("Should be executed"));
+});
