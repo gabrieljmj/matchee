@@ -4,6 +4,10 @@ import { InvalidExpressionType } from "./exceptions/invalid-expression-type";
 
 export const isObject = (x: any): x is object => typeof x === "object";
 
+export function isRegExp(x: any): x is RegExp {
+  return x instanceof RegExp;
+}
+
 /**
  * If the value is a function, we need to call it to get the actual value
  */

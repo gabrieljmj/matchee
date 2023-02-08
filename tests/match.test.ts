@@ -86,3 +86,12 @@ it("should execute a function only when the expression is matched", () => {
   expect(matcher(1)).toEqual("100");
   expect(() => matcher(5)).toThrow(new Error("Should be executed"));
 });
+
+it("should compare regex expressions with strings and numbers", () => {
+  const matcher = match([[/^1/, 1, { a: 1 }, "100"], [/^b/, "200"], "300"]);
+
+  expect(matcher(1)).toEqual("100");
+  expect(matcher({ a: 1 })).toEqual("100");
+  expect(matcher("b")).toEqual("200");
+  expect(matcher("c")).toEqual("300");
+});

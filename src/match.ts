@@ -1,5 +1,5 @@
 import { deepCompareObjects, simplyCompare } from "./comparison-handlers";
-import { getValue, isObject, validateExpressions } from "./helpers";
+import { getValue, isObject, isRegExp, validateExpressions } from "./helpers";
 import { UnhandledMatchExpression } from "./exceptions/unhandled-match-expression";
 
 export type CallableResult<MatchResult> = () => MatchResult;
@@ -21,7 +21,9 @@ export function match<MatchResult, MatchCondition>(
 ) {
   validateExpressions(expressions);
 
-  return (value: MatchCondition) => {
+  return (
+    value: MatchCondition extends RegExp ? string | number : MatchCondition
+  ) => {
     const expIndex = expressions.findIndex((v) => {
       if (Array.isArray(v)) {
         const validExpressions = v.slice(0, -1) as MatchCondition[];
@@ -32,7 +34,13 @@ export function match<MatchResult, MatchCondition>(
           );
         }
 
-        return validExpressions.some((exp) => simplyCompare(exp, value));
+        return validExpressions.some((exp) => {
+          if (isRegExp(exp)) {
+            return exp.test(value as string);
+          }
+
+          return simplyCompare(exp, value as MatchCondition);
+        });
       }
 
       return false;
