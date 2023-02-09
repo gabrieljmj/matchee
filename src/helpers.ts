@@ -1,5 +1,5 @@
 import type { MatchValue, CallableResult, Match, SingleMatch } from "./match";
-import { validTypes } from "./constants";
+import { VALID_EXPRESSION_TYPES } from "./constants";
 import { InvalidExpressionType } from "./exceptions/invalid-expression-type";
 
 export const isObject = (x: any): x is object => typeof x === "object";
@@ -21,7 +21,7 @@ export const getValue = <T>(value: MatchValue<T>) => {
 
 export const validateExpressions = <T, U>(expressions: Match<T, U>) => {
   const validate = (v: any) => {
-    if (!validTypes.includes(typeof v)) {
+    if (!VALID_EXPRESSION_TYPES.includes(typeof v)) {
       throw new InvalidExpressionType(v);
     }
   };
