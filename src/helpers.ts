@@ -1,4 +1,10 @@
-import type { MatchValue, CallableResult, Match, SingleMatch } from "./match";
+import type {
+  MatchValue,
+  CallableResult,
+  Match,
+  SingleMatch,
+  Expression,
+} from "./match";
 import { VALID_EXPRESSION_TYPES } from "./constants";
 import { InvalidExpressionType } from "./exceptions/invalid-expression-type";
 
@@ -15,9 +21,12 @@ export function hasValidExpressionType(x: any) {
 /**
  * If the value is a function, we need to call it to get the actual value
  */
-export const getValue = <T>(value: MatchValue<T>) => {
+export const getValue = <T, MatchCondition>(
+  value: MatchValue<T, MatchCondition>,
+  condition: Expression<MatchCondition>
+) => {
   if (typeof value === "function") {
-    return (value as CallableResult<T>)();
+    return (value as CallableResult<T, MatchCondition>)(condition);
   }
 
   return value;
@@ -29,8 +38,9 @@ export const validateExpressions = <T, U>(expressions: Match<T, U>) => {
       throw new InvalidExpressionType(v);
     }
   };
-  const validateGroupOfExpressions = (exp: MatchValue<T> | SingleMatch<T, U>) =>
-    Array.isArray(exp) && (exp.slice(0, -1) as U[]).forEach(validate);
+  const validateGroupOfExpressions = (
+    exp: MatchValue<T, U> | SingleMatch<T, U>
+  ) => Array.isArray(exp) && (exp.slice(0, -1) as U[]).forEach(validate);
 
   expressions.forEach(validateGroupOfExpressions);
 };

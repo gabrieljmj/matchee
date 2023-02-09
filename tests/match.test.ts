@@ -112,3 +112,20 @@ it("should allow function as default value", () => {
   expect(matcher("12.345.678/9012-34")).toEqual("CNPJ");
   expect(() => matcher("123")).toThrow(new Error("Invalid document"));
 });
+
+it("should allow function that accepts as parameter the passed condition", () => {
+  const matcher = match([
+    [1, 2, "100"],
+    [3, 4, "200"],
+    [
+      5,
+      (condition) => {
+        expect(condition).toEqual(5);
+
+        return (condition * 100).toString();
+      },
+    ],
+  ]);
+
+  expect(matcher(5)).toEqual("500");
+});

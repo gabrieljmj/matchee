@@ -2,19 +2,27 @@ import { deepCompareObjects, simplyCompare } from "./comparison-handlers";
 import { getValue, isObject, isRegExp, validateExpressions } from "./helpers";
 import { UnhandledMatchExpression } from "./exceptions/unhandled-match-expression";
 
-export type CallableResult<MatchResult> = () => MatchResult;
+export type Expression<MatchCondition> = MatchCondition extends RegExp
+  ? string | number
+  : MatchCondition;
 
-export type MatchValue<MatchResult> = MatchResult | CallableResult<MatchResult>;
+export type CallableResult<MatchResult, MatchCondition> = (
+  condition: Expression<MatchCondition>
+) => MatchResult;
+
+export type MatchValue<MatchResult, MatchCondition> =
+  | MatchResult
+  | CallableResult<MatchResult, MatchCondition>;
 
 export type SingleMatch<MatchResult, MatchCondition> = [
   ...keys: MatchCondition[],
-  value: MatchValue<MatchResult>
+  value: MatchValue<MatchResult, MatchCondition>
 ];
 
 export type Match<MatchResult, MatchCondition> = [
   ...expressions: Array<SingleMatch<MatchResult, MatchCondition>>,
   defaultValue:
-    | MatchValue<MatchResult>
+    | MatchValue<MatchResult, MatchCondition>
     | SingleMatch<MatchResult, MatchCondition>
 ];
 
@@ -30,9 +38,7 @@ export function match<MatchResult, MatchCondition>(
 ) {
   validateExpressions(expressions);
 
-  return (
-    value: MatchCondition extends RegExp ? string | number : MatchCondition
-  ) => {
+  return (value: Expression<MatchCondition>) => {
     const expIndex = expressions.findIndex((v) => {
       if (Array.isArray(v)) {
         const validExpressions = v.slice(0, -1) as MatchCondition[];
@@ -60,7 +66,7 @@ export function match<MatchResult, MatchCondition>(
 
     if (expIndex === -1) {
       if (hasDefaultValue) {
-        return getValue(lastValue);
+        return getValue(lastValue, value);
       }
 
       throw new UnhandledMatchExpression(value);
@@ -70,8 +76,11 @@ export function match<MatchResult, MatchCondition>(
       MatchResult,
       MatchCondition
     >;
-    const foundValue = found[found.length - 1] as MatchValue<MatchResult>;
+    const foundValue = found[found.length - 1] as MatchValue<
+      MatchResult,
+      MatchCondition
+    >;
 
-    return getValue(foundValue);
+    return getValue(foundValue, value);
   };
 }
