@@ -8,6 +8,10 @@ export function isRegExp(x: any): x is RegExp {
   return x instanceof RegExp;
 }
 
+export function hasValidExpressionType(x: any) {
+  return VALID_EXPRESSION_TYPES.includes(typeof x);
+}
+
 /**
  * If the value is a function, we need to call it to get the actual value
  */
@@ -21,7 +25,7 @@ export const getValue = <T>(value: MatchValue<T>) => {
 
 export const validateExpressions = <T, U>(expressions: Match<T, U>) => {
   const validate = (v: any) => {
-    if (!VALID_EXPRESSION_TYPES.includes(typeof v)) {
+    if (!hasValidExpressionType(v)) {
       throw new InvalidExpressionType(v);
     }
   };
