@@ -8,6 +8,14 @@ Type-safe expression matching. Similar to [PHP's match expression](https://wiki.
 npm install matchee
 ```
 
+## Motivation
+
+The `match` function is a type-safe way to match expressions. It is similar to the `switch` statement, but with a more concise syntax and more flexibility. It allows to match more than one expression at a time and more types of expressions.
+
+Currently on JavaScript, the `switch` or object literals statement are the most common way to match expressions. However, it is not type-safe and it is not possible to match more than one expression at a time.
+
+Also, it is possible to pass functions as values. This allows to make heavy computations or database queries or any other side effect only when needed.
+
 ## Usage
 
 The basic usage is to pass an array of cases to the `match` function. Each case is an array of values, where the last value is the result of the match.
@@ -103,6 +111,33 @@ try {
   matcher(4);
 } catch (error) {
   console.log(error.message); // UnhandledMatchExpression: No matching expression found for value 4. Maybe try adding a default value.
+}
+```
+
+#### Checking if an error is from `matchee`
+
+There is a helper function to check if an error is an `UnhandledMatchExpression` error: `isMatchError`.
+
+```ts
+import { match, isMatchingError } from "matchee";
+
+try {
+  // something that might throw an error...
+
+  const matcher = match([
+    [1, 2, "100"],
+    [3, "200"],
+  ]);
+
+  matcher(4);
+} catch (error) {
+  if (isMatchingError(error)) {
+    // handle match error
+
+    return;
+  }
+
+  // handle other errors
 }
 ```
 
