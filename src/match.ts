@@ -21,6 +21,10 @@ export type Match<MatchResult, MatchCondition> = [
 export type InferMatchCondition<MatchValue extends (value: any) => any> =
   ReturnType<MatchValue>;
 
+export function isMatchingError(error: any): error is UnhandledMatchExpression {
+  return error instanceof UnhandledMatchExpression;
+}
+
 export function match<MatchResult, MatchCondition>(
   expressions: Match<MatchResult, MatchCondition>
 ) {
