@@ -8,7 +8,8 @@
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "test": "vitest",
-    "lint": "tsc"
+    "lint": "tsc",
+    "release": "npx changeset version && npx changeset publish"
   },
   "author": "Gabriel Jacinto",
   "repository": {
@@ -18,6 +19,7 @@
   "keywords": [],
   "license": "MIT",
   "devDependencies": {
+    "@changesets/cli": "^2.26.0",
     "tsup": "^6.5.0",
     "typescript": "^4.9.5",
     "vitest": "^0.28.4"
