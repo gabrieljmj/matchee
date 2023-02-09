@@ -56,8 +56,6 @@ const matcher = match([
 ]);
 
 const result = matcher(true); // "adult"
-
-const regex = /foo|bar|baz/;
 ```
 
 #### Using regular expressions
