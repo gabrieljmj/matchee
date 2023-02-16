@@ -1,6 +1,6 @@
 {
   "name": "matchee",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Type-safe expression matching",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

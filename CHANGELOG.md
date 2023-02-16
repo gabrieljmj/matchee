@@ -1,3 +1,9 @@
+#### 0.2.1 (2023-02-16)
+
+##### Bug Fixes
+
+*  add Awaited to InferMatchCondition ([70d0c183](https://github.com/gabrieljmj/matchee/commit/70d0c183d58a64f774db7005fe9d6dd266aea62c))
+
 #### 0.2.0 (2023-02-16)
 
 ##### Chores
