@@ -2,6 +2,12 @@
   "name": "matchee",
   "version": "0.2.1",
   "description": "Type-safe expression matching",
+  "keywords": [
+    "match",
+    "pattern matching",
+    "type-safe",
+    "typescript"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -16,7 +22,6 @@
     "type": "git",
     "url": "git+https://github.com/gabrieljmj/matchee.git"
   },
-  "keywords": [],
   "license": "MIT",
   "devDependencies": {
     "@changesets/cli": "^2.26.0",
