@@ -14,7 +14,7 @@
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "test": "vitest",
-    "lint": "tsc",
+    "lint": "eslint src --ext .ts",
     "release": "npx changeset version && npx changeset publish"
   },
   "author": "Gabriel Jacinto",
