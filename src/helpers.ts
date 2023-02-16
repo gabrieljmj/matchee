@@ -8,13 +8,13 @@ import type {
 import { VALID_EXPRESSION_TYPES } from './constants';
 import { InvalidExpressionType } from './exceptions/invalid-expression-type';
 
-export const isObject = (x: any): x is object => typeof x === 'object';
+export const isObject = (x: unknown): x is object => typeof x === 'object';
 
-export function isRegExp(x: any): x is RegExp {
+export function isRegExp(x: unknown): x is RegExp {
   return x instanceof RegExp;
 }
 
-export function hasValidExpressionType(x: any) {
+export function hasValidExpressionType(x: unknown) {
   return VALID_EXPRESSION_TYPES.includes(typeof x);
 }
 
@@ -39,7 +39,7 @@ export const getValue = async <T, MatchCondition>(
 };
 
 export const validateExpressions = <T, U>(expressions: Match<T, U>) => {
-  const validate = (v: any) => {
+  const validate = (v: unknown) => {
     if (!hasValidExpressionType(v)) {
       throw new InvalidExpressionType(v);
     }

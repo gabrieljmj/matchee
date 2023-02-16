@@ -26,10 +26,13 @@ export type Match<MatchResult, MatchCondition> = [
     | SingleMatch<MatchResult, MatchCondition>,
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type InferMatchCondition<MatchValue extends (value: any) => any> =
   Awaited<ReturnType<MatchValue>>;
 
-export function isMatchingError(error: any): error is UnhandledMatchExpression {
+export function isMatchingError(
+  error: unknown,
+): error is UnhandledMatchExpression {
   return error instanceof UnhandledMatchExpression;
 }
 
