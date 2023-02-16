@@ -1,6 +1,19 @@
-# matchee
+<p align="center">
+  <h1 align="center">matchee</h1>
+</p>
 
-Type-safe expression matching. Similar to [PHP's match expression](https://wiki.php.net/rfc/match_expression_v2).
+<p align="center">
+  <a href="https://npmjs.com/package/matchee">
+    <img src="https://img.shields.io/npm/v/matchee" alt="npm version" />
+  </a>
+  <a href="https://github.com/gabrieljmj/matchee/actions">
+    <img src="https://img.shields.io/github/actions/workflow/status/gabrieljmj/matchee/main.yml" alt="build padding">
+  </a>
+</p>
+
+<p align="center">
+  Type-safe expression matching. Similar to <a href="https://wiki.php.net/rfc/match_expression_v2">PHP's match expression</a>.
+</p>
 
 ## Installation
 
