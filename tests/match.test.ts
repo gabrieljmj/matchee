@@ -129,3 +129,18 @@ it("should allow function that accepts as parameter the passed condition", async
 
   await expect(matcher(5)).resolves.toEqual("500");
 });
+
+it("should execute promises", async () => {
+  const matcher = match([
+    [1, 2, "100"],
+    [3, 4, "200"],
+    [
+      5,
+      () => {
+        return Promise.resolve("500");
+      },
+    ],
+  ]);
+
+  await expect(matcher(5)).resolves.toEqual("500");
+});
