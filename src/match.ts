@@ -12,7 +12,7 @@ export type CallableResult<MatchResult, MatchCondition> = (
 
 export type MatchValue<MatchResult, MatchCondition> =
   | MatchResult
-  | CallableResult<MatchResult, MatchCondition>;
+  | CallableResult<MatchResult | Promise<MatchResult>, MatchCondition>;
 
 export type SingleMatch<MatchResult, MatchCondition> = [
   ...keys: MatchCondition[],
@@ -38,7 +38,7 @@ export function match<MatchResult, MatchCondition>(
 ) {
   validateExpressions(expressions);
 
-  return (value: Expression<MatchCondition>) => {
+  return async (value: Expression<MatchCondition>) => {
     const expIndex = expressions.findIndex((v) => {
       if (Array.isArray(v)) {
         const validExpressions = v.slice(0, -1) as MatchCondition[];
@@ -66,7 +66,7 @@ export function match<MatchResult, MatchCondition>(
 
     if (expIndex === -1) {
       if (hasDefaultValue) {
-        return getValue(lastValue, value);
+        return await getValue(lastValue, value);
       }
 
       throw new UnhandledMatchExpression(value);
@@ -81,6 +81,6 @@ export function match<MatchResult, MatchCondition>(
       MatchCondition
     >;
 
-    return getValue(foundValue, value);
+    return await getValue(foundValue, value);
   };
 }

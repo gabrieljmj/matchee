@@ -21,12 +21,18 @@ export function hasValidExpressionType(x: any) {
 /**
  * If the value is a function, we need to call it to get the actual value
  */
-export const getValue = <T, MatchCondition>(
+export const getValue = async <T, MatchCondition>(
   value: MatchValue<T, MatchCondition>,
   condition: Expression<MatchCondition>
 ) => {
   if (typeof value === "function") {
-    return (value as CallableResult<T, MatchCondition>)(condition);
+    const result = (value as CallableResult<T, MatchCondition>)(condition);
+
+    if (result instanceof Promise) {
+      return await result;
+    }
+
+    return result;
   }
 
   return value;
