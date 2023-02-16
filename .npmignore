@@ -3,3 +3,6 @@ src
 .changeset
 tsconfig.json
 tests
+.eslintrc
+.prettierrc.json
+.prettierignore

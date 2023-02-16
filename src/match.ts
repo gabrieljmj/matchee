@@ -1,13 +1,13 @@
-import { deepCompareObjects, simplyCompare } from "./comparison-handlers";
-import { getValue, isObject, isRegExp, validateExpressions } from "./helpers";
-import { UnhandledMatchExpression } from "./exceptions/unhandled-match-expression";
+import { deepCompareObjects, simplyCompare } from './comparison-handlers';
+import { getValue, isObject, isRegExp, validateExpressions } from './helpers';
+import { UnhandledMatchExpression } from './exceptions/unhandled-match-expression';
 
 export type Expression<MatchCondition> = MatchCondition extends RegExp
   ? string | number
   : MatchCondition;
 
 export type CallableResult<MatchResult, MatchCondition> = (
-  condition: Expression<MatchCondition>
+  condition: Expression<MatchCondition>,
 ) => MatchResult;
 
 export type MatchValue<MatchResult, MatchCondition> =
@@ -16,14 +16,14 @@ export type MatchValue<MatchResult, MatchCondition> =
 
 export type SingleMatch<MatchResult, MatchCondition> = [
   ...keys: MatchCondition[],
-  value: MatchValue<MatchResult, MatchCondition>
+  value: MatchValue<MatchResult, MatchCondition>,
 ];
 
 export type Match<MatchResult, MatchCondition> = [
   ...expressions: Array<SingleMatch<MatchResult, MatchCondition>>,
   defaultValue:
     | MatchValue<MatchResult, MatchCondition>
-    | SingleMatch<MatchResult, MatchCondition>
+    | SingleMatch<MatchResult, MatchCondition>,
 ];
 
 export type InferMatchCondition<MatchValue extends (value: any) => any> =
@@ -34,7 +34,7 @@ export function isMatchingError(error: any): error is UnhandledMatchExpression {
 }
 
 export function match<MatchResult, MatchCondition>(
-  expressions: Match<MatchResult, MatchCondition>
+  expressions: Match<MatchResult, MatchCondition>,
 ) {
   validateExpressions(expressions);
 
@@ -45,7 +45,7 @@ export function match<MatchResult, MatchCondition>(
 
         if (isObject(value)) {
           return validExpressions.some((exp) =>
-            deepCompareObjects(exp as object, value)
+            deepCompareObjects(exp as object, value),
           );
         }
 

@@ -4,11 +4,11 @@ import type {
   Match,
   SingleMatch,
   Expression,
-} from "./match";
-import { VALID_EXPRESSION_TYPES } from "./constants";
-import { InvalidExpressionType } from "./exceptions/invalid-expression-type";
+} from './match';
+import { VALID_EXPRESSION_TYPES } from './constants';
+import { InvalidExpressionType } from './exceptions/invalid-expression-type';
 
-export const isObject = (x: any): x is object => typeof x === "object";
+export const isObject = (x: any): x is object => typeof x === 'object';
 
 export function isRegExp(x: any): x is RegExp {
   return x instanceof RegExp;
@@ -23,9 +23,9 @@ export function hasValidExpressionType(x: any) {
  */
 export const getValue = async <T, MatchCondition>(
   value: MatchValue<T, MatchCondition>,
-  condition: Expression<MatchCondition>
+  condition: Expression<MatchCondition>,
 ) => {
-  if (typeof value === "function") {
+  if (typeof value === 'function') {
     const result = (value as CallableResult<T, MatchCondition>)(condition);
 
     if (result instanceof Promise) {
@@ -45,7 +45,7 @@ export const validateExpressions = <T, U>(expressions: Match<T, U>) => {
     }
   };
   const validateGroupOfExpressions = (
-    exp: MatchValue<T, U> | SingleMatch<T, U>
+    exp: MatchValue<T, U> | SingleMatch<T, U>,
   ) => Array.isArray(exp) && (exp.slice(0, -1) as U[]).forEach(validate);
 
   expressions.forEach(validateGroupOfExpressions);

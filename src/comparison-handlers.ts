@@ -1,4 +1,4 @@
-import { isObject, isRegExp } from "./helpers";
+import { isObject, isRegExp } from './helpers';
 
 export function simplyCompare<T>(a: T, b: T) {
   return a === b;
