@@ -1,5 +1,5 @@
 import { it, expect } from 'vitest';
-import { InferMatchCondition, match } from '../src/match';
+import { match } from '../src/match';
 import { InvalidExpressionType } from '../src/exceptions/invalid-expression-type';
 import { UnhandledMatchExpression } from '../src/exceptions/unhandled-match-expression';
 
@@ -66,7 +66,9 @@ it('should not accept undefined as expressions', async () => {
 });
 
 it('should not accept function as expressions', async () => {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   expect(() => match([[() => {}, '100'], '300'])).toThrow(
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     new InvalidExpressionType(() => {}),
   );
 });
@@ -141,7 +143,6 @@ it('should execute promises', async () => {
       },
     ],
   ]);
-  let f: InferMatchCondition<typeof matcher>;
 
   await expect(matcher(5)).resolves.toEqual('500');
 });
