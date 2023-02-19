@@ -6,24 +6,24 @@ export type Expression<MatchCondition> = MatchCondition extends RegExp
   ? string | number
   : MatchCondition;
 
-export type CallableResult<MatchResult, MatchCondition> = (
+export type CallableResult<MatchCondition, MatchResult> = (
   condition: Expression<MatchCondition>,
 ) => MatchResult;
 
-export type MatchValue<MatchResult, MatchCondition> =
+export type MatchValue<MatchCondition, MatchResult> =
   | MatchResult
-  | CallableResult<MatchResult | Promise<MatchResult>, MatchCondition>;
+  | CallableResult<MatchCondition, MatchResult | Promise<MatchResult>>;
 
-export type SingleMatch<MatchResult, MatchCondition> = [
+export type SingleMatch<MatchCondition, MatchResult> = [
   ...keys: MatchCondition[],
-  value: MatchValue<MatchResult, MatchCondition>,
+  value: MatchValue<MatchCondition, MatchResult>,
 ];
 
-export type Match<MatchResult, MatchCondition> = [
-  ...expressions: Array<SingleMatch<MatchResult, MatchCondition>>,
+export type Match<MatchCondition, MatchResult> = [
+  ...expressions: Array<SingleMatch<MatchCondition, MatchResult>>,
   defaultValue:
-    | MatchValue<MatchResult, MatchCondition>
-    | SingleMatch<MatchResult, MatchCondition>,
+    | MatchValue<MatchCondition, MatchResult>
+    | SingleMatch<MatchCondition, MatchResult>,
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,8 +36,8 @@ export function isMatchingError(
   return error instanceof UnhandledMatchExpression;
 }
 
-export function match<MatchResult, MatchCondition>(
-  expressions: Match<MatchResult, MatchCondition>,
+export function match<MatchCondition, MatchResult>(
+  expressions: Match<MatchCondition, MatchResult>,
 ) {
   validateExpressions(expressions);
 
@@ -76,12 +76,12 @@ export function match<MatchResult, MatchCondition>(
     }
 
     const found = expressions[expIndex] as SingleMatch<
-      MatchResult,
-      MatchCondition
+      MatchCondition,
+      MatchResult
     >;
     const foundValue = found[found.length - 1] as MatchValue<
-      MatchResult,
-      MatchCondition
+      MatchCondition,
+      MatchResult
     >;
 
     return await getValue(foundValue, value);
