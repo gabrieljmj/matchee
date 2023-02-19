@@ -36,12 +36,12 @@ The basic usage is to pass an array of cases to the `match` function. Each case 
 It is possible to pass a default case, which is a single value. If no case matches, the default case is returned.
 
 ```ts
-import { match } from "matchee";
+import { match } from 'matchee';
 
 const matcher = match([
-  [1, 2, "100"],
-  [3, "200"],
-  "300", // default
+  [1, 2, '100'],
+  [3, '200'],
+  '300', // default
 ]);
 
 await matcher(1); // 100
@@ -55,13 +55,13 @@ await matcher(5); // 300
 When the values are functions, they are called only when the case matches. It also allows to return a promise.
 
 ```ts
-import { match } from "matchee";
+import { match } from 'matchee';
 
 const matcher = match([
-  [1, () => "100"],
-  [2, async () => Promise.resolve("200")],
-  [3, "300"],
-  "400", // default
+  [1, () => '100'],
+  [2, async () => Promise.resolve('200')],
+  [3, '300'],
+  '400', // default
 ]);
 
 await matcher(1); // 100
@@ -77,15 +77,15 @@ await matcher(5); // 400
 Using the same example used on PHP docs, we can use the `match` to check for boolean values. The first match case will be used.
 
 ```ts
-import { match } from "matchee";
+import { match } from 'matchee';
 
 const age = 23;
 
 const matcher = match([
-  [age >= 65, "senior"],
-  [age >= 18, "adult"],
-  [age >= 13, "teenager"],
-  "kid",
+  [age >= 65, 'senior'],
+  [age >= 18, 'adult'],
+  [age >= 13, 'teenager'],
+  'kid',
 ]);
 
 const result = await matcher(true); // "adult"
@@ -94,36 +94,36 @@ const result = await matcher(true); // "adult"
 #### Using regular expressions
 
 ```ts
-import { match } from "matchee";
+import { match } from 'matchee';
 
 const regex = /foo|bar|baz/;
-const matcher = match([[regex, "match"], "no match"]);
+const matcher = match([[regex, 'match'], 'no match']);
 
-await matcher("foo"); // "match"
-await matcher("bar"); // "match"
-await matcher("baz"); // "match"
-await matcher("qux"); // "no match"
+await matcher('foo'); // "match"
+await matcher('bar'); // "match"
+await matcher('baz'); // "match"
+await matcher('qux'); // "no match"
 ```
 
 or a more complex example using brazilian document numbers:
 
 ```ts
-import { match } from "matchee";
+import { match } from 'matchee';
 
 const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
 const cnpjRegex = /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
 
 const matcher = match([
-  [cpfRegex, "CPF"],
-  [cnpjRegex, "CNPJ"],
+  [cpfRegex, 'CPF'],
+  [cnpjRegex, 'CNPJ'],
   () => {
-    throw new Error("Invalid document");
+    throw new Error('Invalid document');
   },
 ]);
 
-await matcher("123.456.789-10"); // "CPF"
-await matcher("12.345.678/9012-34"); // "CNPJ"
-await matcher("invalid"); // Error: Invalid document
+await matcher('123.456.789-10'); // "CPF"
+await matcher('12.345.678/9012-34'); // "CNPJ"
+await matcher('invalid'); // Error: Invalid document
 ```
 
 ### No matches found
@@ -131,12 +131,12 @@ await matcher("invalid"); // Error: Invalid document
 If no match is found and no default case is provided, an error is thrown.
 
 ```ts
-import { match } from "matchee";
+import { match } from 'matchee';
 
 try {
   const matcher = match([
-    [1, 2, "100"],
-    [3, "200"],
+    [1, 2, '100'],
+    [3, '200'],
   ]);
 
   await matcher(4);
@@ -150,14 +150,14 @@ try {
 There is a helper function to check if an error is an `UnhandledMatchExpression` error: `isMatchError`.
 
 ```ts
-import { match, isMatchingError } from "matchee";
+import { match, isMatchingError } from 'matchee';
 
 try {
   // something that might throw an error...
 
   const matcher = match([
-    [1, 2, "100"],
-    [3, "200"],
+    [1, 2, '100'],
+    [3, '200'],
   ]);
 
   await matcher(4);
@@ -172,14 +172,34 @@ try {
 }
 ```
 
+### Specifying type of conditions and values
+
+The `match` function accepts generics to specify both condition and value types. The first one is the type of the conditions and the second one is the type of the values.
+
+```ts
+import { match } from 'matchee';
+
+match<number, string>([
+  [1, 2, '100'],
+  ['3', '200'], // ts-error: Type 'string' is not assignable to type 'number'.
+  '300', // default
+]);
+
+match<number | string, string>([
+  [1, 2, '100'],
+  ['3', '200'],
+  '300', // default
+]); // works!
+```
+
 ### Inferring result type
 
 It is provided a type-safe way to infer the result type of the match expression. The `InferMatchCondition` type is used to infer the result type.
 
 ```ts
-import { match, type InferMatchCondition } from "matchee";
+import { match, type InferMatchCondition } from 'matchee';
 
-const matcher = match([[1, 2, "100"], [3, "200"], "300"]);
+const matcher = match([[1, 2, '100'], [3, '200'], '300']);
 
 type ResultType = InferMatchCondition<typeof matcher>; // string
 ```
