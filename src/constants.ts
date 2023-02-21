@@ -5,4 +5,4 @@ export const VALID_EXPRESSION_TYPES = [
   'boolean',
   'symbol',
   'object',
-];
+] as const;

@@ -1,3 +1,4 @@
+import '@total-typescript/ts-reset';
 import type {
   MatchValue,
   CallableResult,
