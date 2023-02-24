@@ -1,3 +1,18 @@
+#### 0.3.0 (2023-02-24)
+
+##### Documentation Changes
+
+- improve readme ([d2986918](https://github.com/gabrieljmj/matchee/commit/d298691867cc58238108d7835e8b3ba0f4e2ed03))
+
+##### New Features
+
+- add 'objectPath' function ([c60c3b2b](https://github.com/gabrieljmj/matchee/commit/c60c3b2b4cec26eef0096c3453d27b1af08b8e26))
+
+##### Refactors
+
+- use ts-reset and make const readonly ([cd87a874](https://github.com/gabrieljmj/matchee/commit/cd87a874ca7d0ba8574a28da3c5d14536730272a))
+- flip generics ([0ed99f3b](https://github.com/gabrieljmj/matchee/commit/0ed99f3bbbd27bf88cc1c8f640c07397d0c7e469))
+
 #### 0.2.2 (2023-02-18)
 
 ##### Chores
