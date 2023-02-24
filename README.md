@@ -70,6 +70,46 @@ await matcher(3); // 300
 await matcher(5); // 400
 ```
 
+### Using objects paths
+
+A special syntax is available to match objects paths. It is possible to use the helper `objectPath` create expressions to match object values.
+
+```ts
+import { match, objectPath } from 'matchee';
+
+const matcher = match([
+  [
+    objectPath({
+      'user.role': 'admin',
+    }),
+    'ADMIN_ROLE',
+  ],
+  [
+    objectPath({
+      'user.role': 'user',
+    }),
+    'USER_ROLE',
+  ],
+  'GUEST_ROLE', // default
+]);
+
+await matcher({
+  user: {
+    role: 'admin',
+  },
+}); // ADMIN_ROLE
+await matcher({
+  user: {
+    role: 'user',
+  },
+}); // USER_ROLE
+await matcher({
+  user: {
+    role: 'guest',
+  },
+}); // GUEST_ROLE
+```
+
 ### Usage tricks
 
 #### Using boolean values

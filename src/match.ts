@@ -1,9 +1,22 @@
-import { deepCompareObjects, simplyCompare } from './comparison-handlers';
-import { getValue, isObject, isRegExp, validateExpressions } from './helpers';
+import {
+  compareObjectsWithPaths,
+  deepCompareObjects,
+  simplyCompare,
+} from './comparison-handlers';
+import {
+  getValue,
+  isObject,
+  isObjectPaths,
+  isRegExp,
+  validateExpressions,
+} from './helpers';
 import { UnhandledMatchExpression } from './exceptions/unhandled-match-expression';
+import { ObjectPaths } from './object-paths';
 
 export type Expression<MatchCondition> = MatchCondition extends RegExp
   ? string | number
+  : MatchCondition extends ObjectPaths
+  ? object
   : MatchCondition;
 
 export type CallableResult<MatchCondition, MatchResult> = (
@@ -48,7 +61,9 @@ export function match<MatchCondition, MatchResult>(
 
         if (isObject(value)) {
           return validExpressions.some((exp) =>
-            deepCompareObjects(exp as object, value),
+            isObjectPaths(exp)
+              ? compareObjectsWithPaths(value, exp)
+              : deepCompareObjects(exp as object, value),
           );
         }
 

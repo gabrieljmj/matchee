@@ -2,6 +2,7 @@ import { it, expect } from 'vitest';
 import { match } from '../src/match';
 import { InvalidExpressionType } from '../src/exceptions/invalid-expression-type';
 import { UnhandledMatchExpression } from '../src/exceptions/unhandled-match-expression';
+import { objectPaths } from '../src/object-paths';
 
 it('should match the first value that contains a valid expression', async () => {
   const value = match([
@@ -145,4 +146,36 @@ it('should execute promises', async () => {
   ]);
 
   await expect(matcher(5)).resolves.toEqual('500');
+});
+
+it('should compare object paths with objects', async () => {
+  const matcher = match([
+    [
+      objectPaths({
+        'user.role': 'admin',
+        'user.name': 'John',
+      }),
+      'ADMIN_ROLE',
+    ],
+    [
+      objectPaths({
+        'user.role': 'user',
+      }),
+      'USER_ROLE',
+    ],
+    'GUEST_ROLE',
+  ]);
+
+  await expect(
+    matcher({ user: { role: 'admin', name: 'John' } }),
+  ).resolves.toEqual('ADMIN_ROLE');
+  await expect(
+    matcher({ user: { role: 'admin', name: 'Jame' } }),
+  ).resolves.toEqual('GUEST_ROLE');
+  await expect(matcher({ user: { role: 'user' } })).resolves.toEqual(
+    'USER_ROLE',
+  );
+  await expect(matcher({ user: { role: 'guest' } })).resolves.toEqual(
+    'GUEST_ROLE',
+  );
 });

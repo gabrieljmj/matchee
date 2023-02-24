@@ -1,4 +1,5 @@
 import { isObject, isRegExp } from './helpers';
+import { ObjectPaths } from './object-paths';
 
 export function simplyCompare<T>(a: T, b: T) {
   return a === b;
@@ -37,5 +38,40 @@ export function deepCompareObjects(obj1: object, obj2: object): boolean {
       Object.prototype.hasOwnProperty.call(obj2, key) &&
       simplyCompare(obj1[key], obj2[key])
     );
+  });
+}
+
+export function compareObjectsWithPaths(
+  object: object,
+  objectPaths: ObjectPaths,
+) {
+  const paths = Object.keys(objectPaths.paths);
+
+  return paths.every((path) => {
+    const value = path.split('.').reduce<unknown>((acc, key) => {
+      if (isObject(acc) && key in acc) {
+        return acc[key as keyof typeof acc];
+      }
+
+      if (typeof acc !== 'undefined') {
+        return acc;
+      }
+
+      return undefined;
+    }, object);
+
+    const valueType = typeof value;
+    const pathExpectedValue = objectPaths.paths[path];
+    const pathType = typeof pathExpectedValue;
+
+    if (valueType !== pathType) {
+      return false;
+    }
+
+    if (valueType !== 'object') {
+      return simplyCompare(value, pathExpectedValue);
+    }
+
+    return deepCompareObjects(value as object, pathExpectedValue as object);
   });
 }
