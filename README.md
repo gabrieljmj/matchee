@@ -87,6 +87,7 @@ const matcher = match([
   [
     objectPath({
       'user.role': 'user',
+      '
     }),
     'USER_ROLE',
   ],
@@ -252,5 +253,6 @@ It is possible to use any type of expression as a match case. The following type
 - `number`
 - `string`
 - `object`
-- `symbol`
-- `regexp`
+- `Symbol`
+- `RegExp`
+- `ObjectPaths` - a special type to match object paths
