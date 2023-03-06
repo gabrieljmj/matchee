@@ -87,7 +87,6 @@ const matcher = match([
   [
     objectPath({
       'user.role': 'user',
-      '
     }),
     'USER_ROLE',
   ],
