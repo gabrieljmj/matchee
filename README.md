@@ -255,3 +255,7 @@ It is possible to use any type of expression as a match case. The following type
 - `Symbol`
 - `RegExp`
 - `ObjectPaths` - a special type to match object paths
+
+## Contributing
+
+All ideias and suggestions are welcome. Just create an issue or a pull request. Current not implemented features can be found [here](https://github.com/gabrieljmj/matchee/issues?q=is%3Aopen+is%3Aissue+label%3Afeature).
