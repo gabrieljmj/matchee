@@ -12,13 +12,13 @@ import { ObjectPaths } from './object-paths';
 
 export const isObject = (x: unknown): x is object => typeof x === 'object';
 
-export function isRegExp(x: unknown): x is RegExp {
+export const isRegExp = (x: unknown): x is RegExp => {
   return x instanceof RegExp;
-}
+};
 
-export function isObjectPaths(x: unknown): x is ObjectPaths {
+export const isObjectPaths = (x: unknown): x is ObjectPaths => {
   return x instanceof ObjectPaths;
-}
+};
 
 export function hasValidExpressionType(x: unknown) {
   return VALID_EXPRESSION_TYPES.includes(typeof x);
