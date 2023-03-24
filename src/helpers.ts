@@ -10,15 +10,17 @@ import { VALID_EXPRESSION_TYPES } from './constants';
 import { InvalidExpressionType } from './exceptions/invalid-expression-type';
 import { ObjectPaths } from './object-paths';
 
-export const isObject = (x: unknown): x is object => typeof x === 'object';
+export function isObject(x: unknown): x is object {
+  return typeof x === 'object';
+}
 
-export const isRegExp = (x: unknown): x is RegExp => {
+export function isRegExp(x: unknown): x is RegExp {
   return x instanceof RegExp;
-};
+}
 
-export const isObjectPaths = (x: unknown): x is ObjectPaths => {
+export function isObjectPaths(x: unknown): x is ObjectPaths {
   return x instanceof ObjectPaths;
-};
+}
 
 export function hasValidExpressionType(x: unknown) {
   return VALID_EXPRESSION_TYPES.includes(typeof x);
@@ -27,10 +29,10 @@ export function hasValidExpressionType(x: unknown) {
 /**
  * If the value is a function, we need to call it to get the actual value
  */
-export const getValue = async <MatchCondition, T>(
+export async function getValue<MatchCondition, T>(
   value: MatchValue<MatchCondition, T>,
   condition: Expression<MatchCondition>,
-) => {
+) {
   if (typeof value === 'function') {
     const result = (value as CallableResult<MatchCondition, T>)(condition);
 
@@ -42,9 +44,9 @@ export const getValue = async <MatchCondition, T>(
   }
 
   return value;
-};
+}
 
-export const validateExpressions = <T, U>(expressions: Match<T, U>) => {
+export function validateExpressions<T, U>(expressions: Match<T, U>) {
   const validate = (v: unknown) => {
     if (!hasValidExpressionType(v)) {
       throw new InvalidExpressionType(v);
@@ -55,4 +57,4 @@ export const validateExpressions = <T, U>(expressions: Match<T, U>) => {
   ) => Array.isArray(exp) && (exp.slice(0, -1) as U[]).forEach(validate);
 
   expressions.forEach(validateGroupOfExpressions);
-};
+}
