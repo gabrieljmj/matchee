@@ -44,22 +44,42 @@ const matcher = match([
   '300', // default
 ]);
 
-await matcher(1); // 100
-await matcher(2); // 100
-await matcher(3); // 200
-await matcher(5); // 300
+matcher(1); // 100
+matcher(2); // 100
+matcher(3); // 200
+matcher(5); // 300
 ```
 
 ### Using functions as values
 
-When the values are functions, they are called only when the case matches. It also allows to return a promise.
+When the values are functions, they are called only when the case matches.
 
 ```ts
 import { match } from 'matchee';
 
 const matcher = match([
   [1, () => '100'],
-  [2, async () => Promise.resolve('200')],
+  [2, () => '200'],
+  [3, '300'],
+  '400', // default
+]);
+
+matcher(1); // 100
+matcher(2); // 200
+matcher(3); // 300
+matcher(5); // 400
+```
+
+#### For promises
+
+When some of the values are functions that return promises, use the `asyncMatch` function instead.
+
+```ts
+import { asyncMatch } from 'matchee';
+
+const matcher = asyncMatch([
+  [1, () => Promise.resolve('100')],
+  [2, () => '200'],
   [3, '300'],
   '400', // default
 ]);
@@ -67,7 +87,6 @@ const matcher = match([
 await matcher(1); // 100
 await matcher(2); // 200
 await matcher(3); // 300
-await matcher(5); // 400
 ```
 
 ### Using objects paths
@@ -93,17 +112,17 @@ const matcher = match([
   'GUEST_ROLE', // default
 ]);
 
-await matcher({
+matcher({
   user: {
     role: 'admin',
   },
 }); // ADMIN_ROLE
-await matcher({
+matcher({
   user: {
     role: 'user',
   },
 }); // USER_ROLE
-await matcher({
+matcher({
   user: {
     role: 'guest',
   },
@@ -128,7 +147,7 @@ const matcher = match([
   'kid',
 ]);
 
-const result = await matcher(true); // "adult"
+const result = matcher(true); // "adult"
 ```
 
 #### Using regular expressions
@@ -139,10 +158,10 @@ import { match } from 'matchee';
 const regex = /foo|bar|baz/;
 const matcher = match([[regex, 'match'], 'no match']);
 
-await matcher('foo'); // "match"
-await matcher('bar'); // "match"
-await matcher('baz'); // "match"
-await matcher('qux'); // "no match"
+matcher('foo'); // "match"
+matcher('bar'); // "match"
+matcher('baz'); // "match"
+matcher('qux'); // "no match"
 ```
 
 or a more complex example using brazilian document numbers:
@@ -161,9 +180,9 @@ const matcher = match([
   },
 ]);
 
-await matcher('123.456.789-10'); // "CPF"
-await matcher('12.345.678/9012-34'); // "CNPJ"
-await matcher('invalid'); // Error: Invalid document
+matcher('123.456.789-10'); // "CPF"
+matcher('12.345.678/9012-34'); // "CNPJ"
+matcher('invalid'); // Error: Invalid document
 ```
 
 ### No matches found
@@ -179,7 +198,7 @@ try {
     [3, '200'],
   ]);
 
-  await matcher(4);
+  matcher(4);
 } catch (error) {
   console.log(error.message); // UnhandledMatchExpression: No matching expression found for value 4. Maybe try adding a default value.
 }
@@ -200,7 +219,7 @@ try {
     [3, '200'],
   ]);
 
-  await matcher(4);
+  matcher(4);
 } catch (error) {
   if (isMatchingError(error)) {
     // handle match error
