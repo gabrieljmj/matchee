@@ -22,8 +22,16 @@ export function isObjectPaths(x: unknown): x is ObjectPaths {
   return x instanceof ObjectPaths;
 }
 
+export function isString(x: unknown): x is string {
+  return typeof x === 'string';
+}
+
 export function hasValidExpressionType(x: unknown) {
   return VALID_EXPRESSION_TYPES.includes(typeof x);
+}
+
+export function hasSameType(x: unknown, y: unknown) {
+  return typeof x === typeof y;
 }
 
 /**

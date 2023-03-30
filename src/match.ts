@@ -1,13 +1,10 @@
-import {
-  compareObjectsWithPaths,
-  deepCompareObjects,
-  simplyCompare,
-} from './comparison-handlers';
+import { compareObjects, simplyCompare } from './comparison-handlers';
 import {
   getValue,
+  hasSameType,
   isObject,
-  isObjectPaths,
   isRegExp,
+  isString,
   validateExpressions,
 } from './helpers';
 import { UnhandledMatchExpression } from './exceptions/unhandled-match-expression';
@@ -90,16 +87,24 @@ function findFirstExpressionMatchIndex<MatchCondition, MatchResult>(
       const validExpressions = v.slice(0, -1) as MatchCondition[];
 
       if (isObject(value)) {
-        return validExpressions.some((exp) =>
-          isObjectPaths(exp)
-            ? compareObjectsWithPaths(value, exp)
-            : deepCompareObjects(exp as object, value),
-        );
+        return validExpressions.some((exp) => {
+          if (!isObject(exp)) {
+            return false;
+          }
+
+          return compareObjects(value, exp);
+        });
       }
 
       return validExpressions.some((exp) => {
-        if (isRegExp(exp)) {
-          return exp.test(value as string);
+        const expressionIsRegex = isRegExp(exp);
+
+        if (!expressionIsRegex && !hasSameType(exp, value)) {
+          return false;
+        }
+
+        if (expressionIsRegex && isString(value)) {
+          return exp.test(value);
         }
 
         return simplyCompare(exp, value as MatchCondition);

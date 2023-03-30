@@ -1,4 +1,4 @@
-import { isObject, isRegExp } from './helpers';
+import { isObject, isObjectPaths, isRegExp } from './helpers';
 import { ObjectPaths } from './object-paths';
 
 export function simplyCompare<T>(a: T, b: T) {
@@ -9,7 +9,7 @@ function compareRegExp(a: RegExp, b: RegExp) {
   return a.toString() === b.toString();
 }
 
-export function deepCompareObjects(obj1: object, obj2: object): boolean {
+function deepCompareObjects(obj1: object, obj2: object): boolean {
   const obj1IsRegExp = isRegExp(obj1);
   const obj2IsRegExp = isRegExp(obj2);
 
@@ -41,10 +41,7 @@ export function deepCompareObjects(obj1: object, obj2: object): boolean {
   });
 }
 
-export function compareObjectsWithPaths(
-  object: object,
-  objectPaths: ObjectPaths,
-) {
+function compareObjectsWithPaths(object: object, objectPaths: ObjectPaths) {
   const paths = Object.keys(objectPaths.paths);
 
   return paths.every((path) => {
@@ -74,4 +71,10 @@ export function compareObjectsWithPaths(
 
     return deepCompareObjects(value as object, pathExpectedValue as object);
   });
+}
+
+export function compareObjects(value: object, expectedValue: object) {
+  return isObjectPaths(expectedValue)
+    ? compareObjectsWithPaths(value, expectedValue)
+    : deepCompareObjects(expectedValue, value);
 }
