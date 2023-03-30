@@ -55,34 +55,12 @@ export function match<MatchCondition, MatchResult>(
   validateExpressions(expressions);
 
   return async (value: Expression<MatchCondition>) => {
-    const expIndex = expressions.findIndex((v) => {
-      if (Array.isArray(v)) {
-        const validExpressions = v.slice(0, -1) as MatchCondition[];
-
-        if (isObject(value)) {
-          return validExpressions.some((exp) =>
-            isObjectPaths(exp)
-              ? compareObjectsWithPaths(value, exp)
-              : deepCompareObjects(exp as object, value),
-          );
-        }
-
-        return validExpressions.some((exp) => {
-          if (isRegExp(exp)) {
-            return exp.test(value as string);
-          }
-
-          return simplyCompare(exp, value as MatchCondition);
-        });
-      }
-
-      return false;
-    });
-
+    const expIndex = findFirstExpressionMatchIndex(expressions, value);
     const lastValue = expressions[expressions.length - 1];
     const hasDefaultValue = !Array.isArray(lastValue);
+    const validExpressionFound = expIndex !== -1;
 
-    if (expIndex === -1) {
+    if (!validExpressionFound) {
       if (hasDefaultValue) {
         return await getValue(lastValue, value);
       }
@@ -101,4 +79,33 @@ export function match<MatchCondition, MatchResult>(
 
     return await getValue(foundValue, value);
   };
+}
+
+function findFirstExpressionMatchIndex<MatchCondition, MatchResult>(
+  expressions: Match<MatchCondition, MatchResult>,
+  value: Expression<MatchCondition>,
+) {
+  return expressions.findIndex((v) => {
+    if (Array.isArray(v)) {
+      const validExpressions = v.slice(0, -1) as MatchCondition[];
+
+      if (isObject(value)) {
+        return validExpressions.some((exp) =>
+          isObjectPaths(exp)
+            ? compareObjectsWithPaths(value, exp)
+            : deepCompareObjects(exp as object, value),
+        );
+      }
+
+      return validExpressions.some((exp) => {
+        if (isRegExp(exp)) {
+          return exp.test(value as string);
+        }
+
+        return simplyCompare(exp, value as MatchCondition);
+      });
+    }
+
+    return false;
+  });
 }
