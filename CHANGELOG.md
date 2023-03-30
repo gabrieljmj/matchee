@@ -1,3 +1,26 @@
+#### 0.4.0 (2023-03-30)
+
+##### Chores
+
+- update dependencies ([f7b2421b](https://github.com/gabrieljmj/matchee/commit/f7b2421bc8d93358a4ba0a80d242b7d7a9921d0c))
+
+##### Documentation Changes
+
+- add contributing section ([2ce9b2bf](https://github.com/gabrieljmj/matchee/commit/2ce9b2bf648d4b3347900bb9222265a5fdfc91f2))
+- fix invalid code on docs ([83b30921](https://github.com/gabrieljmj/matchee/commit/83b3092184080f2d252ee97aac17aea27342915d))
+- add ObjectPath to docs ([af173e17](https://github.com/gabrieljmj/matchee/commit/af173e17e3055ce4cdc014c32e560f00d136b491))
+
+##### New Features
+
+- add `asyncMatch` function ([6bc44304](https://github.com/gabrieljmj/matchee/commit/6bc443044ed47f37b89524906914b0305361c00d))
+
+##### Refactors
+
+- decrease `as` operators ([c8a3acbb](https://github.com/gabrieljmj/matchee/commit/c8a3acbba6e2935ea9e5205a08e3bff989c1772f))
+- add separate logic to find matching expression from main match function ([18a0a208](https://github.com/gabrieljmj/matchee/commit/18a0a208778f342bf66958d11f988078d435bdeb))
+- use only functions on helpers file ([8dd7e848](https://github.com/gabrieljmj/matchee/commit/8dd7e848c029453edfd83e3a8cf17b299c12c799))
+- use const instead of function ([2c3c1a36](https://github.com/gabrieljmj/matchee/commit/2c3c1a3668c5a314a976f34bdb8cad3a472439c1))
+
 #### 0.3.0 (2023-02-24)
 
 ##### Documentation Changes
