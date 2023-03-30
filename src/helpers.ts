@@ -26,6 +26,10 @@ export function isString(x: unknown): x is string {
   return typeof x === 'string';
 }
 
+export function isPromise<T>(x: unknown): x is Promise<T> {
+  return x instanceof Promise;
+}
+
 export function hasValidExpressionType(x: unknown) {
   return VALID_EXPRESSION_TYPES.includes(typeof x);
 }
@@ -37,16 +41,12 @@ export function hasSameType(x: unknown, y: unknown) {
 /**
  * If the value is a function, we need to call it to get the actual value
  */
-export async function getValue<MatchCondition, T>(
+export function getValue<MatchCondition, T>(
   value: MatchValue<MatchCondition, T>,
   condition: Expression<MatchCondition>,
 ) {
   if (typeof value === 'function') {
     const result = (value as CallableResult<MatchCondition, T>)(condition);
-
-    if (result instanceof Promise) {
-      return await result;
-    }
 
     return result;
   }

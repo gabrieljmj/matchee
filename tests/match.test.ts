@@ -10,7 +10,7 @@ it('should match the first value that contains a valid expression', async () => 
     [1, 3, '200'],
   ])(1);
 
-  await expect(value).resolves.toEqual('100');
+  expect(value).toEqual('100');
 });
 
 it('should accept more than one condition', async () => {
@@ -19,22 +19,22 @@ it('should accept more than one condition', async () => {
     [4, 5, '200'],
   ])(3);
 
-  await expect(value).resolves.toEqual('100');
+  expect(value).toEqual('100');
 });
 
 it('should match the default value when there is not valid match', async () => {
   const value = match([[1, 2, '100'], [1, 3, '200'], '300'])(4);
 
-  await expect(value).resolves.toEqual('300');
+  expect(value).toEqual('300');
 });
 
 it('should throw an error when there is no default value and not matching keys', async () => {
-  await expect(
+  expect(() =>
     match([
       [1, '1'],
       [2, '2'],
     ])(3),
-  ).rejects.toThrow(new UnhandledMatchExpression(3));
+  ).toThrow(new UnhandledMatchExpression(3));
 });
 
 it('should accept objects as expressions', async () => {
@@ -44,20 +44,20 @@ it('should accept objects as expressions', async () => {
     '300',
   ])({ a: 1 });
 
-  await expect(value).resolves.toEqual('100');
+  expect(value).toEqual('100');
 });
 
 it('should accept boolean values as expressions', async () => {
   const value = match([[true, '100'], [false, '200'], '300'])(true);
 
-  await expect(value).resolves.toEqual('100');
+  expect(value).toEqual('100');
 });
 
 it('should accept symbols as expressions', async () => {
   const aSymbol = Symbol('a');
   const value = match([[aSymbol, '100'], [Symbol('b'), '200'], '300'])(aSymbol);
 
-  await expect(value).resolves.toEqual('100');
+  expect(value).toEqual('100');
 });
 
 it('should not accept undefined as expressions', async () => {
@@ -86,17 +86,17 @@ it('should execute a function only when the expression is matched', async () => 
     ],
   ]);
 
-  await expect(matcher(1)).resolves.toEqual('100');
-  await expect(matcher(5)).rejects.toThrow(new Error('Should be executed'));
+  expect(matcher(1)).toEqual('100');
+  expect(() => matcher(5)).toThrow(new Error('Should be executed'));
 });
 
 it('should compare regex expressions with strings and numbers', async () => {
   const matcher = match([[/^1/, 1, { a: 1 }, '100'], [/^b/, '200'], '300']);
 
-  await expect(matcher(1)).resolves.toEqual('100');
-  await expect(matcher({ a: 1 })).resolves.toEqual('100');
-  await expect(matcher('b')).resolves.toEqual('200');
-  await expect(matcher('c')).resolves.toEqual('300');
+  expect(matcher(1)).toEqual('100');
+  expect(matcher({ a: 1 })).toEqual('100');
+  expect(matcher('b')).toEqual('200');
+  expect(matcher('c')).toEqual('300');
 });
 
 it('should allow function as default value', async () => {
@@ -111,9 +111,9 @@ it('should allow function as default value', async () => {
     },
   ]);
 
-  await expect(matcher('123.456.789-10')).resolves.toEqual('CPF');
-  await expect(matcher('12.345.678/9012-34')).resolves.toEqual('CNPJ');
-  await expect(matcher('123')).rejects.toThrow(new Error('Invalid document'));
+  expect(matcher('123.456.789-10')).toEqual('CPF');
+  expect(matcher('12.345.678/9012-34')).toEqual('CNPJ');
+  expect(() => matcher('123')).toThrow(new Error('Invalid document'));
 });
 
 it('should allow function that accepts as parameter the passed condition', async () => {
@@ -130,22 +130,7 @@ it('should allow function that accepts as parameter the passed condition', async
     ],
   ]);
 
-  await expect(matcher(5)).resolves.toEqual('500');
-});
-
-it('should execute promises', async () => {
-  const matcher = match([
-    [1, 2, '100'],
-    [3, 4, '200'],
-    [
-      5,
-      () => {
-        return Promise.resolve('500');
-      },
-    ],
-  ]);
-
-  await expect(matcher(5)).resolves.toEqual('500');
+  expect(matcher(5)).toEqual('500');
 });
 
 it('should compare object paths with objects', async () => {
@@ -166,16 +151,12 @@ it('should compare object paths with objects', async () => {
     'GUEST_ROLE',
   ]);
 
-  await expect(
-    matcher({ user: { role: 'admin', name: 'John' } }),
-  ).resolves.toEqual('ADMIN_ROLE');
-  await expect(
-    matcher({ user: { role: 'admin', name: 'Jame' } }),
-  ).resolves.toEqual('GUEST_ROLE');
-  await expect(matcher({ user: { role: 'user' } })).resolves.toEqual(
-    'USER_ROLE',
+  expect(matcher({ user: { role: 'admin', name: 'John' } })).toEqual(
+    'ADMIN_ROLE',
   );
-  await expect(matcher({ user: { role: 'guest' } })).resolves.toEqual(
+  expect(matcher({ user: { role: 'admin', name: 'Jame' } })).toEqual(
     'GUEST_ROLE',
   );
+  expect(matcher({ user: { role: 'user' } })).toEqual('USER_ROLE');
+  expect(matcher({ user: { role: 'guest' } })).toEqual('GUEST_ROLE');
 });

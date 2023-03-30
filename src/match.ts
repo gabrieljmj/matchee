@@ -3,6 +3,7 @@ import {
   getValue,
   hasSameType,
   isObject,
+  isPromise,
   isRegExp,
   isString,
   validateExpressions,
@@ -22,7 +23,7 @@ export type CallableResult<MatchCondition, MatchResult> = (
 
 export type MatchValue<MatchCondition, MatchResult> =
   | MatchResult
-  | CallableResult<MatchCondition, MatchResult | Promise<MatchResult>>;
+  | CallableResult<MatchCondition, MatchResult>;
 
 export type SingleMatch<MatchCondition, MatchResult> = [
   ...keys: MatchCondition[],
@@ -51,7 +52,7 @@ export function match<MatchCondition, MatchResult>(
 ) {
   validateExpressions(expressions);
 
-  return async (value: Expression<MatchCondition>) => {
+  return (value: Expression<MatchCondition>) => {
     const expIndex = findFirstExpressionMatchIndex(expressions, value);
     const lastValue = expressions[expressions.length - 1];
     const hasDefaultValue = !Array.isArray(lastValue);
@@ -59,7 +60,7 @@ export function match<MatchCondition, MatchResult>(
 
     if (!validExpressionFound) {
       if (hasDefaultValue) {
-        return await getValue(lastValue, value);
+        return getValue(lastValue, value);
       }
 
       throw new UnhandledMatchExpression(value);
@@ -74,7 +75,23 @@ export function match<MatchCondition, MatchResult>(
       MatchResult
     >;
 
-    return await getValue(foundValue, value);
+    return getValue(foundValue, value);
+  };
+}
+
+export function asyncMatch<MatchCondition, MatchResult>(
+  expressions: Match<MatchCondition, MatchResult | Promise<MatchResult>>,
+) {
+  const matcher = match(expressions);
+
+  return (value: Expression<MatchCondition>) => {
+    const result = matcher(value);
+
+    if (isPromise(result)) {
+      return result;
+    }
+
+    return Promise.resolve(result);
   };
 }
 
