@@ -1,4 +1,4 @@
-import { isObject, isObjectPaths, isRegExp } from './helpers';
+import { hasSameType, isObject, isObjectPaths, isRegExp } from './helpers';
 import { ObjectPaths } from './object-paths';
 
 export function simplyCompare<T>(a: T, b: T) {
@@ -57,19 +57,17 @@ function compareObjectsWithPaths(object: object, objectPaths: ObjectPaths) {
       return undefined;
     }, object);
 
-    const valueType = typeof value;
     const pathExpectedValue = objectPaths.paths[path];
-    const pathType = typeof pathExpectedValue;
 
-    if (valueType !== pathType) {
+    if (!hasSameType(value, pathExpectedValue)) {
       return false;
     }
 
-    if (valueType !== 'object') {
+    if (!isObject(value)) {
       return simplyCompare(value, pathExpectedValue);
     }
 
-    return deepCompareObjects(value as object, pathExpectedValue as object);
+    return deepCompareObjects(value, pathExpectedValue as object);
   });
 }
 
