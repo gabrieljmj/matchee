@@ -1,5 +1,5 @@
 import { hasSameType, isObject, isObjectPaths, isRegExp } from './helpers';
-import { ObjectPaths } from './object-paths';
+import { ObjectPaths, PATH_SEPARATOR } from './object-paths';
 
 export function simplyCompare<T>(a: T, b: T) {
   return a === b;
@@ -45,7 +45,7 @@ function compareObjectsWithPaths(object: object, objectPaths: ObjectPaths) {
   const paths = Object.keys(objectPaths.paths);
 
   return paths.every((path) => {
-    const value = path.split('.').reduce<unknown>((acc, key) => {
+    const value = path.split(PATH_SEPARATOR).reduce<unknown>((acc, key) => {
       if (isObject(acc) && key in acc) {
         return acc[key as keyof typeof acc];
       }
