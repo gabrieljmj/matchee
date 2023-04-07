@@ -1,3 +1,22 @@
+#### 0.4.3 (2023-04-07)
+
+##### Documentation Changes
+
+- add 'asyncMatch' to docs ([a46c81dc](https://github.com/gabrieljmj/matchee/commit/a46c81dcbf8deadb2571549227e1f9233e85c771))
+
+##### Bug Fixes
+
+- export objectPaths function ([3e4ac023](https://github.com/gabrieljmj/matchee/commit/3e4ac023eae3eef60be950e5ec8ae16587179d8c))
+
+##### Other Changes
+
+- v0.4.0 ([a701fd58](https://github.com/gabrieljmj/matchee/commit/a701fd587f6c464204022b4ba89c7135a11a6927))
+
+##### Refactors
+
+- use const instead of direct string ([58fb09b8](https://github.com/gabrieljmj/matchee/commit/58fb09b8044d719484e29a75422af6f12e896455))
+- use helper functions ([526da6b2](https://github.com/gabrieljmj/matchee/commit/526da6b2f4bf061fca127dfa79d9d3d14bb4f5d4))
+
 #### 0.4.0 (2023-03-30)
 
 ##### Chores
