@@ -1,8 +1,7 @@
 import { it, expect } from 'vitest';
-import { match } from '../src/match';
 import { InvalidExpressionType } from '../src/exceptions/invalid-expression-type';
 import { UnhandledMatchExpression } from '../src/exceptions/unhandled-match-expression';
-import { objectPaths } from '../src/object-paths';
+import { objectPaths, match } from '../src';
 
 it('should match the first value that contains a valid expression', async () => {
   const value = match([
