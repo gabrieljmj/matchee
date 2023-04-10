@@ -129,6 +129,25 @@ matcher({
 }); // GUEST_ROLE
 ```
 
+#### Using arrays
+
+Arrays are objects, which means that it is possible to use the `objectPaths` helper to match array values, since indexes are properties.
+
+```ts
+import { match, objectPaths } from 'matchee';
+
+const matcher = match([
+  [
+    objectPaths({
+      '0.1': 'foo',
+    }),
+    'bar',
+  ],
+]);
+
+matcher([['foo', 'baz']]); // bar
+```
+
 ### Usage tricks
 
 #### Using boolean values
