@@ -159,3 +159,38 @@ it('should compare object paths with objects', async () => {
   expect(matcher({ user: { role: 'user' } })).toEqual('USER_ROLE');
   expect(matcher({ user: { role: 'guest' } })).toEqual('GUEST_ROLE');
 });
+
+it('should compare array paths with arrays', async () => {
+  const matcher = match([
+    [
+      objectPaths({
+        '0.0': 1,
+        '0.1': 2,
+        '1.0': 3,
+        '1.1': 4,
+      }),
+      'MATCHED',
+    ],
+    'NOT_MATCHED',
+  ]);
+
+  expect(
+    matcher([
+      [1, 2],
+      [3, 4],
+    ]),
+  ).toEqual('MATCHED');
+  expect(
+    matcher([
+      [1, 2],
+      [3, 5],
+    ]),
+  ).toEqual('NOT_MATCHED');
+  expect(matcher([[1, 2], [3]])).toEqual('NOT_MATCHED');
+  expect(
+    matcher([
+      [1, 2],
+      [3, 4, 5],
+    ]),
+  ).toEqual('MATCHED');
+});
