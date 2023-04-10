@@ -91,20 +91,20 @@ await matcher(3); // 300
 
 ### Using objects paths
 
-A special syntax is available to match objects paths. It is possible to use the helper `objectPath` create expressions to match object values.
+A special syntax is available to match objects paths. It is possible to use the helper `objectPaths` create expressions to match object values.
 
 ```ts
-import { match, objectPath } from 'matchee';
+import { match, objectPaths } from 'matchee';
 
 const matcher = match([
   [
-    objectPath({
+    objectPaths({
       'user.role': 'admin',
     }),
     'ADMIN_ROLE',
   ],
   [
-    objectPath({
+    objectPaths({
       'user.role': 'user',
     }),
     'USER_ROLE',
