@@ -3,5 +3,7 @@ export class UnhandledMatchExpression extends Error {
     super(
       `No matching expression found for value ${value}. Maybe try adding a default value.`,
     );
+
+    this.name = 'UnhandledMatchExpression';
   }
 }

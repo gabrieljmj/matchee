@@ -7,5 +7,7 @@ export class InvalidExpressionType extends Error {
     super(
       `Invalid expression type. Expected one of ${validTypesFormatted}, got ${typeof value}.`,
     );
+
+    this.name = 'InvalidExpressionType';
   }
 }
